@@ -5,6 +5,11 @@
  */
 package lab7_p2_kevinbanegas;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 /**
  *
  * @author Usuario
@@ -16,6 +21,7 @@ public class PVZ extends javax.swing.JFrame {
      */
     public PVZ() {
         initComponents();
+        cargarFilePlantas();
     }
 
     /**
@@ -33,10 +39,10 @@ public class PVZ extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree1 = new javax.swing.JTree();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        batallas_pvz = new javax.swing.JTextArea();
+        plantaEscogida = new javax.swing.JLabel();
+        zombieEscogido = new javax.swing.JLabel();
+        testear = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
@@ -124,15 +130,15 @@ public class PVZ extends javax.swing.JFrame {
         jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
         jScrollPane1.setViewportView(jTree1);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane3.setViewportView(jTextArea1);
+        batallas_pvz.setColumns(20);
+        batallas_pvz.setRows(5);
+        jScrollPane3.setViewportView(batallas_pvz);
 
-        jLabel24.setText("-");
+        plantaEscogida.setText("-");
 
-        jLabel25.setText("-");
+        zombieEscogido.setText("-");
 
-        jButton1.setText("Testear");
+        testear.setText("Testear");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -146,10 +152,10 @@ public class PVZ extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel25, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
-                            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(zombieEscogido, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                            .addComponent(plantaEscogida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(testear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -158,13 +164,13 @@ public class PVZ extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel24)
+                        .addComponent(plantaEscogida)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel25)
+                        .addComponent(zombieEscogido)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)
+                        .addComponent(testear)
                         .addGap(36, 36, 36))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -204,6 +210,11 @@ public class PVZ extends javax.swing.JFrame {
         cargado_zombies.setText("Cargado");
 
         crear_zombies.setText("Crear");
+        crear_zombies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crear_zombiesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -465,12 +476,12 @@ public class PVZ extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Plantas", jPanel2);
 
-        jPanel5.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, 630, 400));
+        jPanel5.add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 630, 400));
 
         jLabel1.setFont(new java.awt.Font("Litera-Serial", 0, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Plantas vs Zombies");
-        jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
+        jPanel5.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 20, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -485,6 +496,45 @@ public class PVZ extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void crear_zombiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crear_zombiesActionPerformed
+        if (cargado_zombies.isSelected()) {
+            Cargado z = new Cargado();
+            z.setAtaque(Integer.parseInt(ataque_zombies.getValue().toString()));
+            z.setEdad(Integer.parseInt(edad_zombies.getValue().toString()));
+            z.setNiveEnojo(Integer.parseInt(enojo_zombies.getValue().toString()));
+            z.setNombre(nombre_zombies.getText());
+            z.setTamaño(Integer.parseInt(tamaño_zombies.getValue().toString()));
+            z.setVida(Integer.parseInt(vida_zombies.getValue().toString()));
+            zombies.add(z);
+        } else if (clasico_zombies.isSelected()) {
+            Clasico z = new Clasico();
+            z.setAtaque(Integer.parseInt(ataque_zombies.getValue().toString()));
+            z.setNombre(nombre_zombies.getText());
+            z.setVida(Integer.parseInt(vida_zombies.getValue().toString()));
+            z.setAñosExp(Integer.parseInt(añosExp_zombies.getValue().toString()));
+            z.setBandera(new Bandera(colorBandera_zombies.getText(), dirBandera_zombies.getText()));
+            zombies.add(z);
+        }
+    }//GEN-LAST:event_crear_zombiesActionPerformed
+    public void cargarFilePlantas() {
+        Scanner sc = null;
+        plantas = new ArrayList();
+        filePlantas = new File("./Plantas.txt");
+        try {
+            sc = new Scanner(filePlantas);
+            sc.useDelimiter("|");
+           // String plantas = "";
+//            while(sc.hasNext()){
+//                plantas += sc.next() +"|";
+//                
+//            }
+           String plantas = sc.nextLine();
+            System.out.println(plantas);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -520,7 +570,11 @@ public class PVZ extends javax.swing.JFrame {
             }
         });
     }
-
+    private ArrayList<Zombies> zombies = new ArrayList();
+    private ArrayList<Plantas> plantas = new ArrayList();
+    private File filePlantas = null;
+    private File fileZombies = null;
+    //private BufferedReader = 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton Tipo_defensa;
     private javax.swing.JButton agregarPersona_zombies;
@@ -528,6 +582,7 @@ public class PVZ extends javax.swing.JFrame {
     private javax.swing.JSpinner ataque_planta;
     private javax.swing.JSpinner ataque_zombies;
     private javax.swing.JSpinner añosExp_zombies;
+    private javax.swing.JTextArea batallas_pvz;
     private javax.swing.JButton button_crearPlanta;
     private javax.swing.JRadioButton cargado_zombies;
     private javax.swing.JRadioButton clasico_zombies;
@@ -539,7 +594,6 @@ public class PVZ extends javax.swing.JFrame {
     private javax.swing.JSpinner dureza_planta;
     private javax.swing.JSpinner edad_zombies;
     private javax.swing.JSpinner enojo_zombies;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -556,8 +610,6 @@ public class PVZ extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -573,21 +625,23 @@ public class PVZ extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTree jTree1;
     private javax.swing.JSpinner magnExp_planta;
     private javax.swing.JTextField nombre_planta;
     private javax.swing.JTextField nombre_zombies;
     private javax.swing.JList<String> personasComidas_zombies;
     private javax.swing.JSpinner peso_planta;
+    private javax.swing.JLabel plantaEscogida;
     private javax.swing.JTextField proyectil_planta;
     private javax.swing.JRadioButton rango_alto;
     private javax.swing.JRadioButton rango_bajo;
     private javax.swing.JRadioButton rango_medio;
     private javax.swing.JSpinner tamaño_zombies;
+    private javax.swing.JButton testear;
     private javax.swing.JRadioButton tipo_disparo;
     private javax.swing.JRadioButton tipo_explo;
     private javax.swing.JSpinner vida_planta;
     private javax.swing.JSpinner vida_zombies;
+    private javax.swing.JLabel zombieEscogido;
     // End of variables declaration//GEN-END:variables
 }
