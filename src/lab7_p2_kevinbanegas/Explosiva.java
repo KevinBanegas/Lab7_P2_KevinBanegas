@@ -19,6 +19,11 @@ public class Explosiva extends Plantas{
     public void setMagnitud(int magnitud) {
         this.magnitud = magnitud;
     }
+
+    @Override
+    public String toString() {
+        return super.toString()+"Explosiva{" + "magnitud=" + magnitud + '}';
+    }
     
     
     

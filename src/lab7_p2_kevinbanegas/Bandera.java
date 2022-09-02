@@ -27,7 +27,7 @@ public class Bandera {
 
     @Override
     public String toString() {
-        return "Bandera{" + "color=" + color + ", dirImagen=" + dirImagen + '}';
+        return super.toString()+"Bandera{" + "color=" + color + ", dirImagen=" + dirImagen + '}';
     }
     
     

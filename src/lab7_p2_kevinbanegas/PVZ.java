@@ -8,6 +8,7 @@ package lab7_p2_kevinbanegas;
 import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -523,13 +524,105 @@ public class PVZ extends javax.swing.JFrame {
         filePlantas = new File("./Plantas.txt");
         try {
             sc = new Scanner(filePlantas);
-            sc.useDelimiter("|");
-           // String plantas = "";
-//            while(sc.hasNext()){
-//                plantas += sc.next() +"|";
-//                
-//            }
-           String plantas = sc.nextLine();
+            String temp = sc.nextLine();
+            String[] plantas_array = temp.split("\\|");
+            for (int i = 0; i < plantas_array.length; i++) {
+                if (plantas_array[i].contains("Disparo:")) {
+                    Disparo d = new Disparo();
+                    String tempAtDisparo = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
+                    String[] atDisparo = tempAtDisparo.split(";");
+                    String[] atributos = plantas_array[i].split("_");
+                    for (int j = 0; j < atributos.length; j++) {
+                        if (atributos[j].contains("Nombre=")) {
+                            for (int k = 0; k < atDisparo.length; k++) {
+                                String[] disparoAtributos = atDisparo[k].split("=");
+                                if ("Proyectil".equals(disparoAtributos[0])) {
+                                    d.setNomProj(disparoAtributos[1]);
+                                } else {
+                                    d.setColor(disparoAtributos[1]);
+                                }
+                            }
+                            String[] atIndividuales = atributos[j].split(",");
+                            for (int k = 0; k < atIndividuales.length; k++) {
+                                String[] indivVariables = atIndividuales[k].split("=");
+                                if ("Nombre".equals(indivVariables[0])) {
+                                    d.setNombre(indivVariables[1]);
+                                } else if ("Vida".equals(indivVariables[0])) {
+                                    d.setVida(Double.parseDouble(indivVariables[1]));
+                                } else if ("Rango".equals(indivVariables[0])) {
+                                    d.setRango(indivVariables[1]);
+                                } else if ("Ataque".equals(indivVariables[0])) {
+                                    d.setAtaque(Double.parseDouble(indivVariables[1]));
+                                }
+                            }
+                        }
+                    }
+                    System.out.println(d);
+                    plantas.add(d);
+                } else if (plantas_array[i].contains("Explosiva:")) {
+                    Explosiva e = new Explosiva();
+                    String tempAtExplosiva = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
+                    String[] atExplosiva = tempAtExplosiva.split(";");
+                    String[] atributos = plantas_array[i].split("_");
+                    for (int j = 0; j < atributos.length; j++) {
+                        if (atributos[j].contains("Nombre=")) {
+                            String[] ExploAtributos = atExplosiva[0].split("=");
+                            e.setMagnitud(Integer.parseInt(ExploAtributos[1]));
+                            String[] atIndividuales = atributos[j].split(",");
+                            for (int k = 0; k < atIndividuales.length; k++) {
+                                String[] indivVariables = atIndividuales[k].split("=");
+                                if ("Nombre".equals(indivVariables[0])) {
+                                    e.setNombre(indivVariables[1]);
+                                } else if ("Vida".equals(indivVariables[0])) {
+                                    e.setVida(Double.parseDouble(indivVariables[1]));
+                                } else if ("Rango".equals(indivVariables[0])) {
+                                    e.setRango(indivVariables[1]);
+                                } else if ("Ataque".equals(indivVariables[0])) {
+                                    e.setAtaque(Double.parseDouble(indivVariables[1]));
+                                }
+                                System.out.println(atIndividuales[k]);
+                            }
+                        }
+                    }
+                    plantas.add(e);
+                    System.out.println(e);
+                } else if (plantas_array[i].contains("Defensa:")) {
+                    Defensa def = new Defensa();
+                    String tempAtDef = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
+                    String[] atExplosiva = tempAtDef.split(";");
+                    String[] atributos = plantas_array[i].split("_");
+                    for (int j = 0; j < atributos.length; j++) {
+                        if (atributos[j].contains("Nombre=")) {
+                            for (int k = 0; k < atExplosiva.length; k++) {
+                                String[] defAtributos = atExplosiva[k].split("=");
+                                if ("Peso".equals(defAtributos[0])) {
+                                    def.setPeso(Integer.parseInt(defAtributos[1]));
+                                } else if("Altura".equals(defAtributos[0])){
+                                    def.setAltura(Integer.parseInt(defAtributos[1]));
+                                } else if("Dureza".equals(defAtributos[0])){
+                                    def.setNivDureza(Integer.parseInt(defAtributos[1]));
+                                }
+                            }
+                            String[] atIndividuales = atributos[j].split(",");
+                            for (int k = 0; k < atIndividuales.length; k++) {
+                                String[] indivVariables = atIndividuales[k].split("=");
+                                if ("Nombre".equals(indivVariables[0])) {
+                                    def.setNombre(indivVariables[1]);
+                                } else if ("Vida".equals(indivVariables[0])) {
+                                    def.setVida(Double.parseDouble(indivVariables[1]));
+                                } else if ("Rango".equals(indivVariables[0])) {
+                                    def.setRango(indivVariables[1]);
+                                } else if ("Ataque".equals(indivVariables[0])) {
+                                    def.setAtaque(Double.parseDouble(indivVariables[1]));
+                                }
+                                System.out.println(atIndividuales[k]);
+                            }
+                        }
+                    }
+                    System.out.println(def);
+                    plantas.add(def);
+                }
+            }
             System.out.println(plantas);
         } catch (Exception e) {
             e.printStackTrace();

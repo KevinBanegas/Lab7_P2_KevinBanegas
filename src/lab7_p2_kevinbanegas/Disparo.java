@@ -33,7 +33,7 @@ public class Disparo extends Plantas{
 
     @Override
     public String toString() {
-        return "Disparo{" + "nomProj=" + nomProj + ", color=" + color + '}';
+        return super.toString()+"Disparo{" + "nomProj=" + nomProj + ", color=" + color + '}';
     }
     
     

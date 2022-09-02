@@ -40,7 +40,7 @@ public class Zombies {
 
     @Override
     public String toString() {
-        return "Zombies{" + "nombre=" + nombre + ", ataque=" + ataque + ", vida=" + vida + '}';
+        return super.toString()+"Zombies{" + "nombre=" + nombre + ", ataque=" + ataque + ", vida=" + vida + '}';
     }
     
     

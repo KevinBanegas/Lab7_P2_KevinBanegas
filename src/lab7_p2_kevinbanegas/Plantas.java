@@ -2,8 +2,8 @@ package lab7_p2_kevinbanegas;
 
 public class Plantas {
     private String nombre;
-    private int ataque;
-    private int vida;
+    private double ataque;
+    private double vida;
     private String rango;
 
     public Plantas(String nombre, int ataque, int vida, String rango) {
@@ -24,19 +24,19 @@ public class Plantas {
         this.nombre = nombre;
     }
 
-    public int getAtaque() {
+    public double getAtaque() {
         return ataque;
     }
 
-    public void setAtaque(int ataque) {
+    public void setAtaque(double ataque) {
         this.ataque = ataque;
     }
 
-    public int getVida() {
+    public double getVida() {
         return vida;
     }
 
-    public void setVida(int vida) {
+    public void setVida(double vida) {
         this.vida = vida;
     }
 
