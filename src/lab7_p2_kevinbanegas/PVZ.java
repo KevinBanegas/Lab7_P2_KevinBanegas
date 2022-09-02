@@ -23,6 +23,7 @@ public class PVZ extends javax.swing.JFrame {
     public PVZ() {
         initComponents();
         cargarFilePlantas();
+        cargarFileZombies();
     }
 
     /**
@@ -628,8 +629,8 @@ public class PVZ extends javax.swing.JFrame {
 
     public void cargarFileZombies() {
         Scanner sc = null;
-        plantas = new ArrayList();
-        fileZombies = new File("./Zombies_.txt");
+        zombies = new ArrayList();
+        fileZombies = new File("./Zombies__.txt");
         try {
             sc = new Scanner(fileZombies);
             String temp = sc.nextLine();
@@ -643,11 +644,25 @@ public class PVZ extends javax.swing.JFrame {
                     for (int j = 0; j < atributos.length; j++) {
                         if (atributos[j].contains("Nombre=")) {
                             for (int k = 0; k < atClasico.length; k++) {
-                                String[] disparoAtributos = atClasico[k].split("=");
-                                if ("Proyectil".equals(disparoAtributos[0])) {
-                                    d.setNomProj(disparoAtributos[1]);
-                                } else {
-                                    d.setColor(disparoAtributos[1]);
+                                String[] atAtributos = atClasico[k].split(";");
+                                for (int l = 0; l < atAtributos.length; l++) {
+                                    if (atAtributos[l].contains("Experiencia")) {
+                                        String[] algo = atAtributos[l].split("=");
+                                        c.setAñosExp(Integer.parseInt(algo[1]));
+                                    } else {
+                                        String tempAtBandera = atAtributos[l].substring(atAtributos[l].indexOf("[") + 1, atAtributos[l].indexOf("]"));
+                                        String[] atBandera = tempAtBandera.split(",");
+                                        Bandera b = new Bandera();
+                                        for (int m = 0; m < atBandera.length; m++) {
+                                            String[] cososBandera = atBandera[m].split(":");
+                                            if ("Color".equals(cososBandera[0])) {
+                                                b.setColor(cososBandera[1]);
+                                            } else {
+                                                b.setDirImagen(cososBandera[1]);
+                                            }
+                                        }
+                                        c.setBandera(b);
+                                    }
                                 }
                             }
                             String[] atIndividuales = atributos[j].split(",");
@@ -657,77 +672,68 @@ public class PVZ extends javax.swing.JFrame {
                                     c.setNombre(indivVariables[1]);
                                 } else if ("Vida".equals(indivVariables[0])) {
                                     c.setVida(Double.parseDouble(indivVariables[1]));
-
                                 } else if ("Ataque".equals(indivVariables[0])) {
                                     c.setAtaque(Double.parseDouble(indivVariables[1]));
                                 }
                             }
                         }
                     }
-                    plantas.add(d);
-                } else if (plantas_array[i].contains("Explosiva:")) {
-                    Explosiva e = new Explosiva();
-                    String tempAtExplosiva = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
-                    String[] atExplosiva = tempAtExplosiva.split(";");
-                    String[] atributos = plantas_array[i].split("_");
+                    System.out.println(c);
+                    zombies.add(c);
+
+                } else {
+                    Cargado ca = new Cargado();
+                    String tempAtCargado = zombies_array[i].substring(zombies_array[i].indexOf("(") + 1, zombies_array[i].indexOf(")"));
+                    String[] atCargado = tempAtCargado.split(";");
+                    String[] atributos = zombies_array[i].split("_");
                     for (int j = 0; j < atributos.length; j++) {
                         if (atributos[j].contains("Nombre=")) {
-                            String[] ExploAtributos = atExplosiva[0].split("=");
-                            e.setMagnitud(Integer.parseInt(ExploAtributos[1]));
+//                            for (int k = 0; k < atCargado.length; k++) {
+//                                String[] atAtributos = atCargado[k].split(";");
+//                                for (int l = 0; l < atAtributos.length; l++) {
+//                                    if (atAtributos[l].contains("Experiencia")) {
+//                                        String[] algo = atAtributos[l].split("=");
+//                                        ca.setAñosExp(Integer.parseInt(algo[1]));
+//                                    } else {
+//                                        String tempAtBandera = atAtributos[l].substring(atAtributos[l].indexOf("[") + 1, atAtributos[l].indexOf("]"));
+//                                        String[] atBandera = tempAtBandera.split(",");
+//                                        Bandera b = new Bandera();
+//                                        for (int m = 0; m < atBandera.length; m++) {
+//                                            String[] cososBandera = atBandera[m].split(":");
+//                                            if ("Color".equals(cososBandera[0])) {
+//                                                b.setColor(cososBandera[1]);
+//                                            } else {
+//                                                b.setDirImagen(cososBandera[1]);
+//                                            }
+//                                        }
+//                                        c.setBandera(b);
+//                                    }
+//                                }
+//                            }
                             String[] atIndividuales = atributos[j].split(",");
                             for (int k = 0; k < atIndividuales.length; k++) {
                                 String[] indivVariables = atIndividuales[k].split("=");
                                 if ("Nombre".equals(indivVariables[0])) {
-                                    e.setNombre(indivVariables[1]);
+                                    ca.setNombre(indivVariables[1]);
                                 } else if ("Vida".equals(indivVariables[0])) {
-                                    e.setVida(Double.parseDouble(indivVariables[1]));
-                                } else if ("Rango".equals(indivVariables[0])) {
-                                    e.setRango(indivVariables[1]);
+                                    ca.setVida(Double.parseDouble(indivVariables[1]));
                                 } else if ("Ataque".equals(indivVariables[0])) {
-                                    e.setAtaque(Double.parseDouble(indivVariables[1]));
+                                    ca.setAtaque(Double.parseDouble(indivVariables[1]));
+                                } else if("Comidos".equals(indivVariables[0])){
+                                    String [] comidos = indivVariables[0].split(",");
+//                                    ArrayList<
+//                                    for (int l = 0; l < comidos.length; l++) {
+//                                        
+//                                    }
                                 }
-                                System.out.println(atIndividuales[k]);
                             }
                         }
                     }
-                    plantas.add(e);
-                } else if (plantas_array[i].contains("Defensa:")) {
-                    Defensa def = new Defensa();
-                    String tempAtDef = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
-                    String[] atExplosiva = tempAtDef.split(";");
-                    String[] atributos = plantas_array[i].split("_");
-                    for (int j = 0; j < atributos.length; j++) {
-                        if (atributos[j].contains("Nombre=")) {
-                            for (int k = 0; k < atExplosiva.length; k++) {
-                                String[] defAtributos = atExplosiva[k].split("=");
-                                if ("Peso".equals(defAtributos[0])) {
-                                    def.setPeso(Integer.parseInt(defAtributos[1]));
-                                } else if ("Altura".equals(defAtributos[0])) {
-                                    def.setAltura(Integer.parseInt(defAtributos[1]));
-                                } else if ("Dureza".equals(defAtributos[0])) {
-                                    def.setNivDureza(Integer.parseInt(defAtributos[1]));
-                                }
-                            }
-                            String[] atIndividuales = atributos[j].split(",");
-                            for (int k = 0; k < atIndividuales.length; k++) {
-                                String[] indivVariables = atIndividuales[k].split("=");
-                                if ("Nombre".equals(indivVariables[0])) {
-                                    def.setNombre(indivVariables[1]);
-                                } else if ("Vida".equals(indivVariables[0])) {
-                                    def.setVida(Double.parseDouble(indivVariables[1]));
-                                } else if ("Rango".equals(indivVariables[0])) {
-                                    def.setRango(indivVariables[1]);
-                                } else if ("Ataque".equals(indivVariables[0])) {
-                                    def.setAtaque(Double.parseDouble(indivVariables[1]));
-                                }
-                                System.out.println(atIndividuales[k]);
-                            }
-                        }
-                    }
-                    plantas.add(def);
+                    System.out.println(c);
+                    zombies.add(c);
+
                 }
             }
-            System.out.println(plantas);
         } catch (Exception e) {
             e.printStackTrace();
         }

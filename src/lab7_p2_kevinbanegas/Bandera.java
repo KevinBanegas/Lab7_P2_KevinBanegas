@@ -9,6 +9,9 @@ public class Bandera {
         this.dirImagen = dirImagen;
     }
 
+    public Bandera() {
+    }
+
     public String getColor() {
         return color;
     }
@@ -27,7 +30,7 @@ public class Bandera {
 
     @Override
     public String toString() {
-        return super.toString()+"Bandera{" + "color=" + color + ", dirImagen=" + dirImagen + '}';
+        return "Bandera{" + "color=" + color + ", dirImagen=" + dirImagen + '}';
     }
     
     
