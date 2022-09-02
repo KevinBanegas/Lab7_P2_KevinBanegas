@@ -2,8 +2,8 @@ package lab7_p2_kevinbanegas;
 
 public class Zombies {
     private String nombre;
-    private int ataque;
-    private int vida;
+    private double ataque;
+    private double vida;
 
     public Zombies(String nombre, int ataque, int vida) {
         this.nombre = nombre;
@@ -22,19 +22,19 @@ public class Zombies {
         this.nombre = nombre;
     }
 
-    public int getAtaque() {
+    public double getAtaque() {
         return ataque;
     }
 
-    public void setAtaque(int ataque) {
+    public void setAtaque(double ataque) {
         this.ataque = ataque;
     }
 
-    public int getVida() {
+    public double getVida() {
         return vida;
     }
 
-    public void setVida(int vida) {
+    public void setVida(double vida) {
         this.vida = vida;
     }
 
