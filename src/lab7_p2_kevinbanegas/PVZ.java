@@ -16,6 +16,8 @@ import java.util.Collections;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
@@ -30,6 +32,7 @@ public class PVZ extends javax.swing.JFrame {
         initComponents();
         cargarFilePlantas();
         cargarFileZombies();
+
     }
 
     /**
@@ -536,6 +539,7 @@ public class PVZ extends javax.swing.JFrame {
             zombies.add(z);
         }
         try {
+            cargarFileZombies();
             escribirFileZombies();
         } catch (IOException ex) {
             Logger.getLogger(PVZ.class.getName()).log(Level.SEVERE, null, ex);
@@ -560,6 +564,8 @@ public class PVZ extends javax.swing.JFrame {
             e.setRango(rango);
             e.setVida(Integer.parseInt(vida_planta.getValue().toString()));
             plantas.add(e);
+            plantas.add(e);
+            arbolesPlantas(e);
         } else if (Tipo_defensa.isSelected()) {
             Defensa d = new Defensa();
             d.setNombre(nombre_planta.getText());
@@ -570,6 +576,8 @@ public class PVZ extends javax.swing.JFrame {
             d.setAtaque(Integer.parseInt(ataque_planta.getValue().toString()));
             d.setNivDureza(Integer.parseInt(dureza_planta.getValue().toString()));
             plantas.add(d);
+            plantas1.add(d);
+            arbolesPlantas(d);
         } else if (tipo_disparo.isSelected()) {
             Disparo dis = new Disparo();
             dis.setNombre(nombre_planta.getText());
@@ -580,9 +588,10 @@ public class PVZ extends javax.swing.JFrame {
             dis.setColor(color_planta.getText());
             dis.setNomProj(proyectil_planta.getText());
             plantas.add(dis);
+            plantas1.add(dis);
+            arbolesPlantas(dis);
         }
         try {
-            cargarFilePlantas();
             escribirFilePlantas();
         } catch (IOException ex) {
             Logger.getLogger(PVZ.class.getName()).log(Level.SEVERE, null, ex);
@@ -598,10 +607,7 @@ public class PVZ extends javax.swing.JFrame {
         filePlantas = new File("./Plantas.txt");
         try {
             sc = new Scanner(filePlantas);
-            String temp = "";
-
-            temp = sc.nextLine();
-
+            String temp = sc.nextLine();
             String[] plantas_array = temp.split("\\|");
             for (int i = 0; i < plantas_array.length; i++) {
                 if (plantas_array[i].contains("Disparo:")) {
@@ -635,6 +641,7 @@ public class PVZ extends javax.swing.JFrame {
                         }
                     }
                     plantas.add(d);
+                    plantas.add(d);
                 } else if (plantas_array[i].contains("Explosiva:")) {
                     Explosiva e = new Explosiva();
                     String tempAtExplosiva = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
@@ -660,6 +667,7 @@ public class PVZ extends javax.swing.JFrame {
                         }
                     }
                     plantas.add(e);
+                    plantas1.add(e);
                 } else if (plantas_array[i].contains("Defensa:")) {
                     Defensa def = new Defensa();
                     String tempAtDef = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
@@ -693,6 +701,7 @@ public class PVZ extends javax.swing.JFrame {
                         }
                     }
                     plantas.add(def);
+                    plantas1.add(def);
                 }
             }
             System.out.println(plantas);
@@ -753,7 +762,7 @@ public class PVZ extends javax.swing.JFrame {
                         }
                     }
                     zombies.add(c);
-
+                    zombies1.add(c);
                 } else {
                     Cargado ca = new Cargado();
                     String tempAtCargado = zombies_array[i].substring(zombies_array[i].indexOf("(") + 1, zombies_array[i].indexOf(")"));
@@ -795,6 +804,7 @@ public class PVZ extends javax.swing.JFrame {
                             }
                         }
                         zombies.add(ca);
+                        zombies1.add(ca);
                     }
                 }
             }
@@ -808,7 +818,7 @@ public class PVZ extends javax.swing.JFrame {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter(fileZombies, false);
+            fw = new FileWriter(fileZombies, true);
             bw = new BufferedWriter(fw);
             bw.write(oneZombie);
             bw.flush();
@@ -820,20 +830,21 @@ public class PVZ extends javax.swing.JFrame {
     }
 
     public void escribirFilePlantas() throws IOException {
-//        FileWriter fw = null;
-//        BufferedWriter bw = null;
-//        try {
-//            fw = new FileWriter(filePlantas, false);
-//            bw = new BufferedWriter(fw);
-//            for (ArrayList<String> AS : shufflePlantas) {
-//                System.out.println(AS.toString());
-//            }
-//            bw.flush();
-//        } catch (Exception ex) {
-//            System.out.println("nooo");
-//        }
-//        bw.close();
-//        fw.close();
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter(filePlantas, true);
+            bw = new BufferedWriter(fw);
+            for (ArrayList<String> AS : shufflePlantas) {
+                System.out.println(AS.toString());
+                //bw.write(AS.toString());
+            }
+            bw.flush();
+        } catch (Exception ex) {
+            System.out.println("nooo");
+        }
+        bw.close();
+        fw.close();
     }
 
     public void shufflePlantas() {
@@ -878,6 +889,28 @@ public class PVZ extends javax.swing.JFrame {
 
     }
 
+    public void arbolesPlantas(Plantas p) {
+        
+        DefaultTreeModel m = (DefaultTreeModel)jTree1.getModel();
+        DefaultMutableTreeNode r = (DefaultMutableTreeNode) m.getRoot();
+        DefaultMutableTreeNode n = new DefaultMutableTreeNode(p.getNombre());
+        if(tipo_explo.isSelected()){
+            ((DefaultMutableTreeNode)(r.getChildAt(2))).add(n);
+        }else if(Tipo_defensa.isSelected()){
+            if(rango_alto.isSelected()){
+                ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(2)).add(n);
+            }else if(rango_bajo.isSelected()){
+                ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(0)).add(n);
+            }else if(rango_medio.isSelected()){
+                ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(1)).add(n);
+            }
+            
+        }else if(tipo_disparo.isSelected()){
+            ((DefaultMutableTreeNode)(r.getChildAt(0))).add(n);
+        }
+        m.reload();
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -918,6 +951,8 @@ public class PVZ extends javax.swing.JFrame {
     }
     private ArrayList<Zombies> zombies = new ArrayList();
     private ArrayList<Plantas> plantas = new ArrayList();
+    private ArrayList<Zombies> zombies1 = new ArrayList();
+    private ArrayList<Plantas> plantas1 = new ArrayList();
     private ArrayList<ArrayList<String>> shufflePlantas = new ArrayList();
     private ArrayList<String> personas = new ArrayList();
     private String oneZombie;
