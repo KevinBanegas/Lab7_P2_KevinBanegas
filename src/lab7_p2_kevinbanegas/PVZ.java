@@ -529,6 +529,7 @@ public class PVZ extends javax.swing.JFrame {
             z.setVida(Integer.parseInt(vida_zombies.getValue().toString()));
             z.setPersonas(personas);
             zombies.add(z);
+            arbolesZombies(z);
         } else if (clasico_zombies.isSelected()) {
             Clasico z = new Clasico();
             z.setAtaque(Integer.parseInt(ataque_zombies.getValue().toString()));
@@ -537,13 +538,10 @@ public class PVZ extends javax.swing.JFrame {
             z.setAñosExp(Integer.parseInt(añosExp_zombies.getValue().toString()));
             z.setBandera(new Bandera(colorBandera_zombies.getText(), dirBandera_zombies.getText()));
             zombies.add(z);
+            arbolesZombies(z);
         }
-        try {
-            cargarFileZombies();
-            escribirFileZombies();
-        } catch (IOException ex) {
-            Logger.getLogger(PVZ.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        cargarFileZombies();
     }//GEN-LAST:event_crear_zombiesActionPerformed
 
     private void button_crearPlantaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_crearPlantaActionPerformed
@@ -642,6 +640,7 @@ public class PVZ extends javax.swing.JFrame {
                     }
                     plantas.add(d);
                     plantas.add(d);
+                    arbolesPlantas(d);
                 } else if (plantas_array[i].contains("Explosiva:")) {
                     Explosiva e = new Explosiva();
                     String tempAtExplosiva = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
@@ -668,6 +667,8 @@ public class PVZ extends javax.swing.JFrame {
                     }
                     plantas.add(e);
                     plantas1.add(e);
+                    arbolesPlantas(e);
+                    
                 } else if (plantas_array[i].contains("Defensa:")) {
                     Defensa def = new Defensa();
                     String tempAtDef = plantas_array[i].substring(plantas_array[i].indexOf("(") + 1, plantas_array[i].indexOf(")"));
@@ -702,6 +703,7 @@ public class PVZ extends javax.swing.JFrame {
                     }
                     plantas.add(def);
                     plantas1.add(def);
+                    arbolesPlantas(def);
                 }
             }
             System.out.println(plantas);
@@ -745,6 +747,7 @@ public class PVZ extends javax.swing.JFrame {
                                             }
                                         }
                                         c.setBandera(b);
+                                        
                                     }
                                 }
                             }
@@ -763,6 +766,7 @@ public class PVZ extends javax.swing.JFrame {
                     }
                     zombies.add(c);
                     zombies1.add(c);
+                    arbolesZombies(c);
                 } else {
                     Cargado ca = new Cargado();
                     String tempAtCargado = zombies_array[i].substring(zombies_array[i].indexOf("(") + 1, zombies_array[i].indexOf(")"));
@@ -805,6 +809,7 @@ public class PVZ extends javax.swing.JFrame {
                         }
                         zombies.add(ca);
                         zombies1.add(ca);
+                        arbolesZombies(ca);
                     }
                 }
             }
@@ -879,34 +884,46 @@ public class PVZ extends javax.swing.JFrame {
             if (zomby instanceof Clasico) {
                 oneZombie += "Clasico:(Bandera=[Color:" + ((Clasico) zomby).getBandera().getColor() + ",Direccion:" + ((Clasico) zomby).getBandera().getDirImagen() + "];Experiencia=" + ((Clasico) zomby).getAñosExp() + ")_Ataque=" + zomby.getAtaque() + ",Vida=" + zomby.getVida() + ",Nombre=" + zomby.getNombre() + "|";
             } else if (zomby instanceof Cargado) {
-                String personas = "";
+                String personas1 = "";
                 for (int i = 0; i < ((Cargado) (zomby)).getPersonas().size(); i++) {
-                    personas += ((Cargado) (zomby)).getPersonas().get(i);
+                    personas1 += ((Cargado) (zomby)).getPersonas().get(i);
                 }
-                oneZombie += "Vida=" + zomby.getVida() + ",Ataque=" + zomby.getAtaque() + ",Nombre=" + zomby.getNombre() + "_Cargado:(Enojo=" + ((Cargado) zomby).getNiveEnojo() + ";Edad=" + ((Cargado) zomby).getEdad() + ";Comidos={" + personas + "};Tamano=" + ((Cargado) zomby).getTamaño() + ")|";
+                oneZombie += "Vida=" + zomby.getVida() + ",Ataque=" + zomby.getAtaque() + ",Nombre=" + zomby.getNombre() + "_Cargado:(Enojo=" + ((Cargado) zomby).getNiveEnojo() + ";Edad=" + ((Cargado) zomby).getEdad() + ";Comidos={" + personas1 + "};Tamano=" + ((Cargado) zomby).getTamaño() + ")|";
             }
         }
 
     }
 
     public void arbolesPlantas(Plantas p) {
-        
         DefaultTreeModel m = (DefaultTreeModel)jTree1.getModel();
         DefaultMutableTreeNode r = (DefaultMutableTreeNode) m.getRoot();
         DefaultMutableTreeNode n = new DefaultMutableTreeNode(p.getNombre());
         if(tipo_explo.isSelected()){
-            ((DefaultMutableTreeNode)(r.getChildAt(2))).add(n);
+            ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(2)).add(n);
         }else if(Tipo_defensa.isSelected()){
             if(rango_alto.isSelected()){
-                ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(2)).add(n);
+                ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(1).getChildAt(2)).add(n);
             }else if(rango_bajo.isSelected()){
-                ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(0)).add(n);
+                ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(1).getChildAt(0)).add(n);
             }else if(rango_medio.isSelected()){
-                ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(1)).add(n);
+                ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(1).getChildAt(1)).add(n);
             }
             
         }else if(tipo_disparo.isSelected()){
-            ((DefaultMutableTreeNode)(r.getChildAt(0))).add(n);
+            ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(0)).add(n);
+        }
+        m.reload();
+    }
+    
+    public void arbolesZombies(Zombies z){
+        DefaultTreeModel m = (DefaultTreeModel)jTree1.getModel();
+        DefaultMutableTreeNode r = (DefaultMutableTreeNode) m.getRoot();
+        DefaultMutableTreeNode n = new DefaultMutableTreeNode(z.getNombre());
+        if(clasico_zombies.isSelected()){
+            ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(0)).add(n);
+        
+        }else if(cargado_zombies.isSelected()){
+            ((DefaultMutableTreeNode)(r.getChildAt(1)).getChildAt(2)).add(n);
         }
         m.reload();
     }
