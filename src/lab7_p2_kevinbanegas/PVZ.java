@@ -680,7 +680,7 @@ public class PVZ extends javax.swing.JFrame {
         }
         x++;
         y++;
-        if(y==zombies.size()){
+        if(y==zombies.size()-1){
             x=0;
         }
     }//GEN-LAST:event_testearActionPerformed
