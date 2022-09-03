@@ -670,7 +670,9 @@ public class PVZ extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void testearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testearActionPerformed
-        
+        if(y==zombies.size()-1){
+            x=0;
+        }
         if(plantas1.get(x).getAtaque() > zombies1.get(x).getAtaque()){
             batallas_pvz.append("El zombie"+zombies1.get(x).getNombre()+"  tiene "+zombies1.get(x).getAtaque()+" de ataque y la Planta "+plantas1.get(x).getNombre()+" tiene "+plantas1.get(x).getAtaque()+" de ataque: GANA PLANTA\n");
         } else if(plantas1.get(x).getAtaque() < zombies1.get(x).getAtaque()){
@@ -680,9 +682,6 @@ public class PVZ extends javax.swing.JFrame {
         }
         x++;
         y++;
-        if(y==zombies.size()-1){
-            x=0;
-        }
     }//GEN-LAST:event_testearActionPerformed
     public void cargarFilePlantas() {
         Scanner sc = null;
