@@ -6,10 +6,16 @@
 package lab7_p2_kevinbanegas;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -20,10 +26,11 @@ public class PVZ extends javax.swing.JFrame {
     /**
      * Creates new form PVZ
      */
-    public PVZ() {
+    public PVZ() throws IOException {
         initComponents();
         cargarFilePlantas();
         cargarFileZombies();
+        escribirFilePlantas();
     }
 
     /**
@@ -580,7 +587,6 @@ public class PVZ extends javax.swing.JFrame {
                                 } else if ("Ataque".equals(indivVariables[0])) {
                                     e.setAtaque(Double.parseDouble(indivVariables[1]));
                                 }
-                                System.out.println(atIndividuales[k]);
                             }
                         }
                     }
@@ -614,7 +620,6 @@ public class PVZ extends javax.swing.JFrame {
                                 } else if ("Ataque".equals(indivVariables[0])) {
                                     def.setAtaque(Double.parseDouble(indivVariables[1]));
                                 }
-                                System.out.println(atIndividuales[k]);
                             }
                         }
                     }
@@ -678,7 +683,6 @@ public class PVZ extends javax.swing.JFrame {
                             }
                         }
                     }
-                    System.out.println(c);
                     zombies.add(c);
 
                 } else {
@@ -691,19 +695,14 @@ public class PVZ extends javax.swing.JFrame {
                             for (int k = 0; k < atCargado.length; k++) {
                                 String[] atAtributos = atCargado[k].split(";");
                                 for (int l = 0; l < atAtributos.length; l++) {
-
-                                    if ("Enojo".contains(atAtributos[l])) {
-                                        String[] algo = atAtributos[l].split("=");
+                                    String[] algo = atAtributos[l].split("=");
+                                    if ("Enojo".equals(algo[0])) {
                                         ca.setNiveEnojo(Integer.parseInt(algo[1]));
-                                    } else if ("Edad".contains(atAtributos[l])) {
-                                        String[] algo = atAtributos[l].split("=");
+                                    } else if ("Edad".equals(algo[0])) {
                                         ca.setEdad(Integer.parseInt(algo[1]));
-                                    } else if ("Tamaño".contains(atAtributos[l])) {
-                                        String[] algo = atAtributos[l].split("=");
+                                    } else if ("Tamano".equals(algo[0])) {
                                         ca.setTamaño(Integer.parseInt(algo[1]));
-                                    } else {
-                                        String[] algo = atAtributos[l].split("=");
-                                        System.out.println(algo);
+                                    } else if ("Comidos".equals(algo[0])) {
                                         String temp1 = algo[1].substring(algo[1].indexOf("{") + 1, algo[1].indexOf("}"));
                                         String[] comidos = temp1.split(",");
                                         ArrayList<String> eaten = new ArrayList();
@@ -726,14 +725,89 @@ public class PVZ extends javax.swing.JFrame {
                                 }
                             }
                         }
-                        System.out.println(ca);
                         zombies.add(ca);
                     }
                 }
             }
+            System.out.println(zombies);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void escribirFileZombies() throws IOException {
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter(fileZombies, false);
+            bw = new BufferedWriter(fw);
+            bw.write(oneZombie);
+            bw.flush();
+        } catch (Exception ex) {
+            System.out.println("nooo");
+        }
+        bw.close();
+        fw.close();
+    }
+
+    public void escribirFilePlantas() throws IOException{
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter(filePlantas, false);
+            bw = new BufferedWriter(fw);
+            for (ArrayList<String> AS : shufflePlantas) {
+                System.out.println(AS.toString());
+                //bw.write(AS.toString());
+            }
+            bw.flush();
+        } catch (Exception ex) {
+            System.out.println("nooo");
+        }
+        bw.close();
+        fw.close();
+    }
+
+    public void shufflePlantas() {
+        cargarFilePlantas();
+        ArrayList<String> onePlant = new ArrayList();
+        shufflePlantas = new ArrayList();
+        for (Plantas planta : plantas) {
+            onePlant.add("Nombre" + planta.getNombre());
+            onePlant.add("Ataque=" + planta.getAtaque());
+            onePlant.add("Vida=" + planta.getVida());
+            onePlant.add("Rango=" + planta.getRango());
+            if (planta instanceof Disparo) {
+                onePlant.add("Proyectil=" + ((Disparo) planta).getNomProj());
+                onePlant.add("Color=" + ((Disparo) planta).getColor());
+            } else if (planta instanceof Defensa) {
+                onePlant.add("Peso=" + ((Defensa) planta).getPeso());
+                onePlant.add("Altura=" + ((Defensa) planta).getAltura());
+                onePlant.add("Dureza=" + ((Defensa) planta).getNivDureza());
+            } else if (planta instanceof Explosiva) {
+                onePlant.add("Magnitud=" + ((Explosiva) planta).getMagnitud());
+            }
+            Collections.shuffle(onePlant);
+            shufflePlantas.add(onePlant);
+        }
+        Collections.shuffle(shufflePlantas);
+    }
+
+    public void shuffleZombies() {
+        cargarFileZombies();
+        oneZombie = "";
+        for (Zombies zomby : zombies) {
+            if (zomby instanceof Clasico) {
+                oneZombie += "Clasico:(Bandera=[Color:" + ((Clasico) zomby).getBandera().getColor() + ",Direccion:" + ((Clasico) zomby).getBandera().getDirImagen() + "];Experiencia=" + ((Clasico) zomby).getAñosExp() + ")_Ataque=" + zomby.getAtaque() + ",Vida=" + zomby.getVida() + ",Nombre=" + zomby.getNombre() + "|";
+            } else if (zomby instanceof Cargado) {
+                String personas = "";
+                for (int i = 0; i < ((Cargado) (zomby)).getPersonas().size(); i++) {
+                    personas += ((Cargado) (zomby)).getPersonas().get(i);
+                }
+                oneZombie += "Vida=" + zomby.getVida() + ",Ataque=" + zomby.getAtaque() + ",Nombre=" + zomby.getNombre() + "_Cargado:(Enojo=" + ((Cargado) zomby).getNiveEnojo() + ";Edad=" + ((Cargado) zomby).getEdad() + ";Comidos={" + personas + "};Tamano=" + ((Cargado) zomby).getTamaño() + ")|";
+            }
+        }
+
     }
 
     /**
@@ -766,12 +840,18 @@ public class PVZ extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PVZ().setVisible(true);
+                try {
+                    new PVZ().setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(PVZ.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
     private ArrayList<Zombies> zombies = new ArrayList();
     private ArrayList<Plantas> plantas = new ArrayList();
+    private ArrayList<ArrayList<String>> shufflePlantas = new ArrayList();
+    private String oneZombie;
     private File filePlantas = null;
     private File fileZombies = null;
     //private BufferedReader = 
