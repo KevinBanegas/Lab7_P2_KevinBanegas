@@ -30,7 +30,6 @@ public class PVZ extends javax.swing.JFrame {
         initComponents();
         cargarFilePlantas();
         cargarFileZombies();
-        escribirFilePlantas();
     }
 
     /**
@@ -205,6 +204,11 @@ public class PVZ extends javax.swing.JFrame {
         jLabel20.setText("Agregar Persona Comida");
 
         agregarPersona_zombies.setText("+");
+        agregarPersona_zombies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                agregarPersona_zombiesActionPerformed(evt);
+            }
+        });
 
         jScrollPane2.setViewportView(personasComidas_zombies);
 
@@ -343,6 +347,11 @@ public class PVZ extends javax.swing.JFrame {
         jLabel6.setText("Vida");
 
         button_crearPlanta.setText("Crear");
+        button_crearPlanta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                button_crearPlantaActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Magnitud de Explosion");
 
@@ -515,6 +524,7 @@ public class PVZ extends javax.swing.JFrame {
             z.setNombre(nombre_zombies.getText());
             z.setTamaño(Integer.parseInt(tamaño_zombies.getValue().toString()));
             z.setVida(Integer.parseInt(vida_zombies.getValue().toString()));
+            z.setPersonas(personas);
             zombies.add(z);
         } else if (clasico_zombies.isSelected()) {
             Clasico z = new Clasico();
@@ -525,14 +535,73 @@ public class PVZ extends javax.swing.JFrame {
             z.setBandera(new Bandera(colorBandera_zombies.getText(), dirBandera_zombies.getText()));
             zombies.add(z);
         }
+        try {
+            escribirFileZombies();
+        } catch (IOException ex) {
+            Logger.getLogger(PVZ.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_crear_zombiesActionPerformed
+
+    private void button_crearPlantaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_crearPlantaActionPerformed
+        String rango = "";
+        if (rango_bajo.isSelected()) {
+            rango = rango_bajo.getText();
+        } else if (rango_alto.isSelected()) {
+            rango = rango_alto.getText();
+        } else if (rango_medio.isSelected()) {
+            rango = rango_alto.getText();
+        }
+
+        if (tipo_explo.isSelected()) {
+            Explosiva e = new Explosiva();
+            e.setNombre(nombre_planta.getText());
+            e.setMagnitud(Integer.parseInt(magnExp_planta.getValue().toString()));
+            e.setNombre(nombre_planta.getText());
+            e.setRango(rango);
+            e.setVida(Integer.parseInt(vida_planta.getValue().toString()));
+            plantas.add(e);
+        } else if (Tipo_defensa.isSelected()) {
+            Defensa d = new Defensa();
+            d.setNombre(nombre_planta.getText());
+            d.setNombre(nombre_planta.getText());
+            d.setRango(rango);
+            d.setVida(Integer.parseInt(vida_planta.getValue().toString()));
+            d.setAltura(Integer.parseInt(altura_planta.getValue().toString()));
+            d.setAtaque(Integer.parseInt(ataque_planta.getValue().toString()));
+            d.setNivDureza(Integer.parseInt(dureza_planta.getValue().toString()));
+            plantas.add(d);
+        } else if (tipo_disparo.isSelected()) {
+            Disparo dis = new Disparo();
+            dis.setNombre(nombre_planta.getText());
+            dis.setNombre(nombre_planta.getText());
+            dis.setRango(rango);
+            dis.setVida(Integer.parseInt(vida_planta.getValue().toString()));
+            dis.setAtaque(Integer.parseInt(ataque_planta.getValue().toString()));
+            dis.setColor(color_planta.getText());
+            dis.setNomProj(proyectil_planta.getText());
+            plantas.add(dis);
+        }
+        try {
+            cargarFilePlantas();
+            escribirFilePlantas();
+        } catch (IOException ex) {
+            Logger.getLogger(PVZ.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_button_crearPlantaActionPerformed
+
+    private void agregarPersona_zombiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarPersona_zombiesActionPerformed
+        personas.add(comida_zombies.getText());
+    }//GEN-LAST:event_agregarPersona_zombiesActionPerformed
     public void cargarFilePlantas() {
         Scanner sc = null;
         plantas = new ArrayList();
         filePlantas = new File("./Plantas.txt");
         try {
             sc = new Scanner(filePlantas);
-            String temp = sc.nextLine();
+            String temp = "";
+
+            temp = sc.nextLine();
+
             String[] plantas_array = temp.split("\\|");
             for (int i = 0; i < plantas_array.length; i++) {
                 if (plantas_array[i].contains("Disparo:")) {
@@ -750,22 +819,21 @@ public class PVZ extends javax.swing.JFrame {
         fw.close();
     }
 
-    public void escribirFilePlantas() throws IOException{
-        FileWriter fw = null;
-        BufferedWriter bw = null;
-        try {
-            fw = new FileWriter(filePlantas, false);
-            bw = new BufferedWriter(fw);
-            for (ArrayList<String> AS : shufflePlantas) {
-                System.out.println(AS.toString());
-                //bw.write(AS.toString());
-            }
-            bw.flush();
-        } catch (Exception ex) {
-            System.out.println("nooo");
-        }
-        bw.close();
-        fw.close();
+    public void escribirFilePlantas() throws IOException {
+//        FileWriter fw = null;
+//        BufferedWriter bw = null;
+//        try {
+//            fw = new FileWriter(filePlantas, false);
+//            bw = new BufferedWriter(fw);
+//            for (ArrayList<String> AS : shufflePlantas) {
+//                System.out.println(AS.toString());
+//            }
+//            bw.flush();
+//        } catch (Exception ex) {
+//            System.out.println("nooo");
+//        }
+//        bw.close();
+//        fw.close();
     }
 
     public void shufflePlantas() {
@@ -851,6 +919,7 @@ public class PVZ extends javax.swing.JFrame {
     private ArrayList<Zombies> zombies = new ArrayList();
     private ArrayList<Plantas> plantas = new ArrayList();
     private ArrayList<ArrayList<String>> shufflePlantas = new ArrayList();
+    private ArrayList<String> personas = new ArrayList();
     private String oneZombie;
     private File filePlantas = null;
     private File fileZombies = null;
