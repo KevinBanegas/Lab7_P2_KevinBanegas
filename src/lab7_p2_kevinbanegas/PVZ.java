@@ -688,50 +688,47 @@ public class PVZ extends javax.swing.JFrame {
                     String[] atributos = zombies_array[i].split("_");
                     for (int j = 0; j < atributos.length; j++) {
                         if (atributos[j].contains("Nombre=")) {
-//                            for (int k = 0; k < atCargado.length; k++) {
-//                                String[] atAtributos = atCargado[k].split(";");
-//                                for (int l = 0; l < atAtributos.length; l++) {
-//                                    if (atAtributos[l].contains("Experiencia")) {
-//                                        String[] algo = atAtributos[l].split("=");
-//                                        ca.setAñosExp(Integer.parseInt(algo[1]));
-//                                    } else {
-//                                        String tempAtBandera = atAtributos[l].substring(atAtributos[l].indexOf("[") + 1, atAtributos[l].indexOf("]"));
-//                                        String[] atBandera = tempAtBandera.split(",");
-//                                        Bandera b = new Bandera();
-//                                        for (int m = 0; m < atBandera.length; m++) {
-//                                            String[] cososBandera = atBandera[m].split(":");
-//                                            if ("Color".equals(cososBandera[0])) {
-//                                                b.setColor(cososBandera[1]);
-//                                            } else {
-//                                                b.setDirImagen(cososBandera[1]);
-//                                            }
-//                                        }
-//                                        c.setBandera(b);
-//                                    }
-//                                }
-//                            }
-                            String[] atIndividuales = atributos[j].split(",");
-                            for (int k = 0; k < atIndividuales.length; k++) {
-                                String[] indivVariables = atIndividuales[k].split("=");
-                                if ("Nombre".equals(indivVariables[0])) {
-                                    ca.setNombre(indivVariables[1]);
-                                } else if ("Vida".equals(indivVariables[0])) {
-                                    ca.setVida(Double.parseDouble(indivVariables[1]));
-                                } else if ("Ataque".equals(indivVariables[0])) {
-                                    ca.setAtaque(Double.parseDouble(indivVariables[1]));
-                                } else if("Comidos".equals(indivVariables[0])){
-                                    String [] comidos = indivVariables[0].split(",");
-//                                    ArrayList<
-//                                    for (int l = 0; l < comidos.length; l++) {
-//                                        
-//                                    }
+                            for (int k = 0; k < atCargado.length; k++) {
+                                String[] atAtributos = atCargado[k].split(";");
+                                for (int l = 0; l < atAtributos.length; l++) {
+
+                                    if ("Enojo".contains(atAtributos[l])) {
+                                        String[] algo = atAtributos[l].split("=");
+                                        ca.setNiveEnojo(Integer.parseInt(algo[1]));
+                                    } else if ("Edad".contains(atAtributos[l])) {
+                                        String[] algo = atAtributos[l].split("=");
+                                        ca.setEdad(Integer.parseInt(algo[1]));
+                                    } else if ("Tamaño".contains(atAtributos[l])) {
+                                        String[] algo = atAtributos[l].split("=");
+                                        ca.setTamaño(Integer.parseInt(algo[1]));
+                                    } else {
+                                        String[] algo = atAtributos[l].split("=");
+                                        System.out.println(algo);
+                                        String temp1 = algo[1].substring(algo[1].indexOf("{") + 1, algo[1].indexOf("}"));
+                                        String[] comidos = temp1.split(",");
+                                        ArrayList<String> eaten = new ArrayList();
+                                        for (int m = 0; m < comidos.length; m++) {
+                                            eaten.add(comidos[m]);
+                                        }
+                                        ca.setPersonas(eaten);
+                                    }
+                                }
+                                String[] atIndividuales = atributos[j].split(",");
+                                for (int m = 0; m < atIndividuales.length; m++) {
+                                    String[] indivVariables = atIndividuales[m].split("=");
+                                    if ("Nombre".equals(indivVariables[0])) {
+                                        ca.setNombre(indivVariables[1]);
+                                    } else if ("Vida".equals(indivVariables[0])) {
+                                        ca.setVida(Double.parseDouble(indivVariables[1]));
+                                    } else if ("Ataque".equals(indivVariables[0])) {
+                                        ca.setAtaque(Double.parseDouble(indivVariables[1]));
+                                    }
                                 }
                             }
                         }
+                        System.out.println(ca);
+                        zombies.add(ca);
                     }
-                    System.out.println(c);
-                    zombies.add(c);
-
                 }
             }
         } catch (Exception e) {
