@@ -670,12 +670,18 @@ public class PVZ extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void testearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testearActionPerformed
-        if(plantas1.get(0).getAtaque() > zombies1.get(0).getAtaque()){
-            batallas_pvz.append("El zombie"+zombies1.get(0).getNombre()+"  tiene "+zombies1.get(0).getAtaque()+" de ataque y la Planta "+plantas1.get(0).getNombre()+" tiene "+plantas1.get(0).getAtaque()+" de ataque: GANA PLANTA");
-        } else if(plantas1.get(0).getAtaque() < zombies1.get(0).getAtaque()){
-            batallas_pvz.append("El zombie"+zombies1.get(0).getNombre()+"  tiene "+zombies1.get(0).getAtaque()+" de ataque y la Planta "+plantas1.get(0).getNombre()+" tiene "+plantas1.get(0).getAtaque()+" de ataque: GANA ZOMBIE");
+        
+        if(plantas1.get(x).getAtaque() > zombies1.get(x).getAtaque()){
+            batallas_pvz.append("El zombie"+zombies1.get(x).getNombre()+"  tiene "+zombies1.get(x).getAtaque()+" de ataque y la Planta "+plantas1.get(x).getNombre()+" tiene "+plantas1.get(x).getAtaque()+" de ataque: GANA PLANTA\n");
+        } else if(plantas1.get(x).getAtaque() < zombies1.get(x).getAtaque()){
+            batallas_pvz.append("El zombie"+zombies1.get(x).getNombre()+"  tiene "+zombies1.get(x).getAtaque()+" de ataque y la Planta "+plantas1.get(x).getNombre()+" tiene "+plantas1.get(x).getAtaque()+" de ataque: GANA ZOMBIE\n");
         } else{
-            batallas_pvz.append("El zombie"+zombies1.get(0).getNombre()+"  tiene "+zombies1.get(0).getAtaque()+" de ataque y la Planta "+plantas1.get(0).getNombre()+" tiene "+plantas1.get(0).getAtaque()+" de ataque: EMPATE");
+            batallas_pvz.append("El zombie"+zombies1.get(x).getNombre()+"  tiene "+zombies1.get(x).getAtaque()+" de ataque y la Planta "+plantas1.get(x).getNombre()+" tiene "+plantas1.get(x).getAtaque()+" de ataque: EMPATE\n");
+        }
+        x++;
+        y++;
+        if(y==zombies.size()){
+            x=0;
         }
     }//GEN-LAST:event_testearActionPerformed
     public void cargarFilePlantas() {
@@ -1053,6 +1059,8 @@ public class PVZ extends javax.swing.JFrame {
     private ArrayList<String> personas = new ArrayList();
     private int cent = 0;
     private int cent1 = 0;
+    private int x = 0;
+    private int y  = 0;
     private String oneZombie;
     private File filePlantas = null;
     private File fileZombies = null;
