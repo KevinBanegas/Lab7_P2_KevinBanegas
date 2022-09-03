@@ -44,6 +44,10 @@ public class PVZ extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopupMenu1 = new javax.swing.JPopupMenu();
+        Eliminar = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jPanel5 = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -112,6 +116,30 @@ public class PVZ extends javax.swing.JFrame {
         color_planta = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
 
+        Eliminar.setText("Eliminar");
+        Eliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EliminarActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(Eliminar);
+
+        jMenuItem2.setText("Imprimir");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem2);
+
+        jMenuItem3.setText("Elegir");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jPopupMenu1.add(jMenuItem3);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel5.setBackground(new java.awt.Color(153, 204, 255));
@@ -139,6 +167,12 @@ public class PVZ extends javax.swing.JFrame {
         treeNode2.add(treeNode3);
         treeNode1.add(treeNode2);
         jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jTree1.setComponentPopupMenu(jPopupMenu1);
+        jTree1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTree1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTree1);
 
         batallas_pvz.setColumns(20);
@@ -150,6 +184,11 @@ public class PVZ extends javax.swing.JFrame {
         zombieEscogido.setText("-");
 
         testear.setText("Testear");
+        testear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                testearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -540,8 +579,10 @@ public class PVZ extends javax.swing.JFrame {
             zombies.add(z);
             arbolesZombies(z);
         }
-        
+        if(cent == 0){
         cargarFileZombies();
+        }
+        cent =1 ;
     }//GEN-LAST:event_crear_zombiesActionPerformed
 
     private void button_crearPlantaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button_crearPlantaActionPerformed
@@ -589,6 +630,10 @@ public class PVZ extends javax.swing.JFrame {
             plantas1.add(dis);
             arbolesPlantas(dis);
         }
+        if(cent1 == 0){
+        cargarFilePlantas();
+        }
+        cent1 =1 ;
         try {
             escribirFilePlantas();
         } catch (IOException ex) {
@@ -599,6 +644,40 @@ public class PVZ extends javax.swing.JFrame {
     private void agregarPersona_zombiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarPersona_zombiesActionPerformed
         personas.add(comida_zombies.getText());
     }//GEN-LAST:event_agregarPersona_zombiesActionPerformed
+
+    private void jTree1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTree1MouseClicked
+        if(evt.isMetaDown()){
+            jPopupMenu1.setVisible(true);
+            
+        }
+    }//GEN-LAST:event_jTree1MouseClicked
+
+    private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_EliminarActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        System.out.println(jTree1.getSelectionPath().getLastPathComponent());
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        if(jTree1.getSelectionPath().getLastPathComponent() instanceof Plantas){
+            plantaEscogida.setText(((Plantas)(jTree1.getSelectionPath().getLastPathComponent())).getNombre());
+        }else if(jTree1.getSelectionPath().getLastPathComponent() instanceof Zombies){
+            zombieEscogido.setText(((Zombies)(jTree1.getSelectionPath().getLastPathComponent())).getNombre());
+        }
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void testearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testearActionPerformed
+        if(plantas1.get(0).getAtaque() > zombies1.get(0).getAtaque()){
+            batallas_pvz.append("El zombie"+zombies1.get(0).getNombre()+"  tiene "+zombies1.get(0).getAtaque()+" de ataque y la Planta "+plantas1.get(0).getNombre()+" tiene "+plantas1.get(0).getAtaque()+" de ataque: GANA PLANTA");
+        } else if(plantas1.get(0).getAtaque() < zombies1.get(0).getAtaque()){
+            batallas_pvz.append("El zombie"+zombies1.get(0).getNombre()+"  tiene "+zombies1.get(0).getAtaque()+" de ataque y la Planta "+plantas1.get(0).getNombre()+" tiene "+plantas1.get(0).getAtaque()+" de ataque: GANA ZOMBIE");
+        } else{
+            batallas_pvz.append("El zombie"+zombies1.get(0).getNombre()+"  tiene "+zombies1.get(0).getAtaque()+" de ataque y la Planta "+plantas1.get(0).getNombre()+" tiene "+plantas1.get(0).getAtaque()+" de ataque: EMPATE");
+        }
+    }//GEN-LAST:event_testearActionPerformed
     public void cargarFilePlantas() {
         Scanner sc = null;
         plantas = new ArrayList();
@@ -900,7 +979,7 @@ public class PVZ extends javax.swing.JFrame {
         DefaultMutableTreeNode n = new DefaultMutableTreeNode(p.getNombre());
         if(tipo_explo.isSelected()){
             ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(2)).add(n);
-        }else if(Tipo_defensa.isSelected()){
+        }else if(tipo_disparo.isSelected()){
             if(rango_alto.isSelected()){
                 ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(1).getChildAt(2)).add(n);
             }else if(rango_bajo.isSelected()){
@@ -909,7 +988,7 @@ public class PVZ extends javax.swing.JFrame {
                 ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(1).getChildAt(1)).add(n);
             }
             
-        }else if(tipo_disparo.isSelected()){
+        }else if(Tipo_defensa.isSelected()){
             ((DefaultMutableTreeNode)(r.getChildAt(0)).getChildAt(0)).add(n);
         }
         m.reload();
@@ -972,11 +1051,14 @@ public class PVZ extends javax.swing.JFrame {
     private ArrayList<Plantas> plantas1 = new ArrayList();
     private ArrayList<ArrayList<String>> shufflePlantas = new ArrayList();
     private ArrayList<String> personas = new ArrayList();
+    private int cent = 0;
+    private int cent1 = 0;
     private String oneZombie;
     private File filePlantas = null;
     private File fileZombies = null;
     //private BufferedReader = 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem Eliminar;
     private javax.swing.JRadioButton Tipo_defensa;
     private javax.swing.JButton agregarPersona_zombies;
     private javax.swing.JSpinner altura_planta;
@@ -1018,10 +1100,13 @@ public class PVZ extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
